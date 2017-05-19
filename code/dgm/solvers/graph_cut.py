@@ -60,8 +60,8 @@ class GraphCut(object):
 
             if factor.arity == 1:
                 variable = factor.variables[0]
-                e0 = factor.evaluate(0)
-                e1 = factor.evaluate(1)
+                e0 = factor.evaluate((0,))
+                e1 = factor.evaluate((1,))
 
                 if e0 <= e1:
                     c = e1-e0
@@ -93,6 +93,10 @@ class GraphCut(object):
                 if c < 0.0 and c >= -1.0*self._tolerance:
                     c = 0.0
                 elif c<0:
+                    print("e00",e00)
+                    print("e01",e01)
+                    print("e10",e10)
+                    print("e11",e11)
                     raise RuntimeError("pairwise factor must be submodular")
 
                 add_edge(variable0, variable1, capacity=c);

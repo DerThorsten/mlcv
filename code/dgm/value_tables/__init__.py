@@ -6,5 +6,7 @@ from . value_tables import *
 __all__ = [
     "ValueTableBase",
     "DenseValueTable",
-    "PottsFunction"
+    "PottsFunction",
+    "WeightedPottsFunction",
+    "WeightedTwoClassUnary"
 ]

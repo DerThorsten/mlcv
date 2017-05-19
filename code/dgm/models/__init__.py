@@ -3,5 +3,6 @@ from . discrete_graphical_model import *
 
 __all__ = [
     "Factor",
-    "DiscreteGraphicalModel"
+    "DiscreteGraphicalModel",
+    "WeightedDiscreteGraphicalModel"
 ]

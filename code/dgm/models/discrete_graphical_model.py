@@ -62,6 +62,25 @@ class Factor(object):
         return self._value_table[labels]
 
 
+    # for weighted gms
+
+    @property
+    def n_weights(self):
+        return self._value_table.n_weights
+
+    @property
+    def weight_ids(self):
+        return self._value_table.weight_ids
+
+    def change_weights(self, weights):
+        self._value_table.change_weights(weights=weights)
+
+    def gradient(self, weight_number, labels):
+        return self._value_table.gradient(weight_number=weight_number, labels=labels)
+
+
+
+
 class DiscreteGraphicalModel(object):
     """[summary]
         
@@ -172,3 +191,33 @@ class DiscreteGraphicalModel(object):
 
 
 
+class WeightedDiscreteGraphicalModel(DiscreteGraphicalModel):
+    def __init__(self, variable_space, weights):
+        super(WeightedDiscreteGraphicalModel, self).__init__(variable_space=variable_space)
+
+        self.weights = weights
+    @property
+    def n_weights(self):
+        return self.weights.shape[0]
+
+    def change_weights(self, weights):
+        self.weights = weights
+        for factor in self.factors:
+            if factor.n_weights > 0:
+                factor.change_weights(weights)
+
+
+    def phi(self, labels):
+
+        ret = numpy.zeros(self.n_weights)
+        for factor in self.factors:
+            if factor.n_weights > 0:
+
+                factor_labels = labels[factor.variables]
+                weight_ids = factor.weight_ids
+
+                for w_nr, w_id in enumerate(weight_ids):
+                    g = factor.gradient(w_nr, factor_labels)
+                    ret[w_id] += g
+
+        return ret
